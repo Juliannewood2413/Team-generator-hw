@@ -28,7 +28,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const writeToFile = util.promisify(fs.writeFile);
+// const writeToFile = util.promisify(fs.writeFile);
 
 const teamChoice = () => {
     inquirer.prompt([
@@ -72,7 +72,16 @@ const teamChoice = () => {
                             })
                             break;
                         case 'Intern':
-                            internPrompt();
+                            inquirer.prompt([
+                                {
+                                    message: "What school is the Intern from?",
+                                    name: "school"
+                                }
+                            ]).then(resIntern => {
+                                const intern = new Intern(resBasic.name, resBasic.id, resBasic.email, resIntern.school);
+                                employees.push(intern);
+                                teamChoice();
+                            });
                             break;
                     }
                 })
